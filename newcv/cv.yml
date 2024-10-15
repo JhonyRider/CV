@@ -1,26 +1,39 @@
-name: Deploy Website
+name: Deploy to Azure App Service
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger deployment on push to main branch
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    # Step 1: Checkout the code from the repository
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: npm install # If you're using a static site generator like Jekyll, Hugo, etc.
+    # Step 2: Set up .NET Core SDK (if applicable for your project)
+    - name: 'Set up .NET Core'
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x' # Modify based on your project version
 
-      - name: Build website
-        run: npm run build # Or equivalent build command for your site
+    # Step 3: Build the project (if necessary for .NET-based sites)
+    - name: 'Build project'
+      run: dotnet build --configuration Release
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public  # Specify your website's output directory
+    # Step 4: Login to Azure
+    - name: 'Azure Login'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Step 5: Deploy to Azure App Service
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'your-app-service-name'  # Replace with your Azure App Service name
+        package: '.'  # Path to your web app package or directory
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
