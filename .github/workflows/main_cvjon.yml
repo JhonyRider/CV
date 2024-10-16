@@ -39,6 +39,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}  # Web app URL reference remains here
 
     steps:
       - name: Download artifact from build job
@@ -54,6 +55,3 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_720AA7E4E2E34E1BB25F7F02ED27683E }}
           package: ${{ env.DOTNET_ROOT }}/myapp
-
-      - name: Display web app URL
-        run: echo "Web app URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
