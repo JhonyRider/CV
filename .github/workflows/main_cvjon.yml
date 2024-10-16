@@ -19,7 +19,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Change to project directory
-        run: cd ${{env.DOTNET_ROOT}}/myapp
+        run: cd ${{env.DOTNET_ROOT}}\myapp
       - name: Build with dotnet
         run: dotnet build --configuration Release
       - name: dotnet publish
@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}\myapp
 
   deploy:
     runs-on: windows-latest
