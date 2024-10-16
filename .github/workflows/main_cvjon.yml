@@ -19,7 +19,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Change to project directory
-        run: cd your_project_directory
+        run: cd ${{env.DOTNET_ROOT}}/myapp
       - name: Build with dotnet
         run: dotnet build --configuration Release
       - name: dotnet publish
