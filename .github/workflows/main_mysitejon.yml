@@ -38,7 +38,6 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
 
@@ -62,4 +61,6 @@ jobs:
           app-name: 'Mysitejon'
           slot-name: 'Production'
           package: .
-          
+
+      - name: Set web app URL
+        run: echo "Web app URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
